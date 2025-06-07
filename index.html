@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Base64 Encoder & Decoder</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f3f4f6;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 700px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-family: monospace;
+            resize: vertical;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px 20px 0;
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        button:hover {
+            background: #1e40af;
+        }
+        .output {
+            position: relative;
+            margin-top: 20px;
+        }
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            background: #10b981;
+            border: none;
+            padding: 6px 12px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>🧬 Base64 Encode & Decode</h2>
+    
+    <label>Masukkan Teks:</label>
+    <textarea id="inputText" placeholder="Masukkan teks atau base64 di sini..."></textarea>
+    
+    <br>
+    <button onclick="encode()">🔐 Encode</button>
+    <button onclick="decode()">🔓 Decode</button>
+
+    <div class="output" id="encodeOutput" style="display:none;">
+        <label>Hasil Encode:</label>
+        <textarea id="encodedResult" readonly></textarea>
+        <button class="copy-btn" onclick="copyToClipboard('encodedResult')">Salin</button>
+    </div>
+
+    <div class="output" id="decodeOutput" style="display:none;">
+        <label>Hasil Decode:</label>
+        <textarea id="decodedResult" readonly></textarea>
+        <button class="copy-btn" onclick="copyToClipboard('decodedResult')">Salin</button>
+    </div>
+</div>
+
+<script>
+function encode() {
+    const input = document.getElementById("inputText").value;
+    try {
+        const encoded = btoa(unescape(encodeURIComponent(input)));
+        document.getElementById("encodedResult").value = encoded;
+        document.getElementById("encodeOutput").style.display = "block";
+        document.getElementById("decodeOutput").style.display = "none";
+    } catch (e) {
+        alert("Gagal encode: " + e.message);
+    }
+}
+
+function decode() {
+    const input = document.getElementById("inputText").value;
+    try {
+        const decoded = decodeURIComponent(escape(atob(input)));
+        document.getElementById("decodedResult").value = decoded;
+        document.getElementById("decodeOutput").style.display = "block";
+        document.getElementById("encodeOutput").style.display = "none";
+    } catch (e) {
+        document.getElementById("decodedResult").value = "❌ Base64 tidak valid.";
+        document.getElementById("decodeOutput").style.display = "block";
+        document.getElementById("encodeOutput").style.display = "none";
+    }
+}
+
+function copyToClipboard(id) {
+    const el = document.getElementById(id);
+    el.select();
+    el.setSelectionRange(0, 99999); // for mobile
+    document.execCommand("copy");
+    alert("📋 Teks berhasil disalin!");
+}
+</script>
+</body>
+</html>
